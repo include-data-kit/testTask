@@ -24,6 +24,7 @@ def auth_reading_csv():
             writer.writerows(dataframe)
         # Создаём связующую таблицу на основе таблицы leads.csv
         shutil.copy("csv/leads.csv", "csv/main.csv")
+    print("Complete step 1")
 
 def managers_list():
     df1 = pd.read_csv('csv/main.csv', delimiter=';')
@@ -36,8 +37,17 @@ def managers_list():
                 df1.at[index_1, 'd_club'] = df2.at[index_2, 'd_club']
             elif item_manager_id == "00000000-0000-0000-0000-000000000000":
                 continue
+    df1.to_csv('csv/main.csv', sep=';', index=False)
+    print("Complete step 2")
+def clearning_nan_item():
+    df1 = pd.read_csv('csv/main.csv', delimiter=';')
+    #Чистим вилкой раз раз раз, убираем мы нули
+    for index_1, item_nan_manager in enumerate(df1['l_manager_id']):
+        if (item_nan_manager and df1.at[index_1, 'l_client_id']) == "00000000-0000-0000-0000-000000000000":
+            df1.drop([index_1], inplace=True)
 
     df1.to_csv('csv/main.csv', sep=';', index=False)
+    print("Complete step 3")
 
 def transactions_list():
     df1 = pd.read_csv('csv/main.csv', delimiter=';')
@@ -57,7 +67,7 @@ def transactions_list():
                     continue
 
     df1.to_csv('csv/main.csv', sep=';', index=False)
-
+    print("Complete step 4")
 def check_new_client():
     df1 = pd.read_csv('csv/main.csv', delimiter=';')
     df2 = pd.read_csv('csv/clients.csv', sep=';')
@@ -96,6 +106,7 @@ def check_new_client():
                 break
 
     df1.to_csv('csv/main.csv', sep=';', index=False)
+    print("Complete step 5")
 
 def new_customers():
     df1 = pd.read_csv('csv/main.csv', delimiter=';')
@@ -127,13 +138,22 @@ def new_customers():
                 df1.at[index_1, 'new_customer'] = '0'
 
     df1.to_csv('csv/main.csv', sep=';', index=False)
+    print("Complete step 6")
 
 def main():
     auth_reading_csv()
+    clearning_nan_item()
     managers_list()
     transactions_list()
     check_new_client()
     new_customers()
+
+#TODO: Написать функцию покупателей, если  купил в течение недели после заявки
+#TODO: Написать функцию мусорных заявок, если на основании заявки не создан клиент
+#TODO: Написать функцию новых заявок, если не было заявок и покупок от этого клиента раньше
+#TODO: Функция, если кто купил в течение недели после заявки
+#TODO: количество новых покупателей, если купил в течение недели после заявки, и не покупал раньше)
+#TODO: доход от покупок новых покупателей
 
 if __name__ == "__main__":
     main()
