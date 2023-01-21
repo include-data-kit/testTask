@@ -9,7 +9,7 @@ def auth_reading_csv():
     #Авторизируемся на сервере с помощью email и private_key, который получили в GCP
     gc = gspread.service_account(filename='keys.json')
     #Ключ таблицы с которой нужно считать данные
-    sh_read = gc.open_by_key("1CCEd2_KlXeNzWFAo_FX09UCXJ2GTXSWqbzKLtIu8TNU")
+    sh_read = gc.open_by_key("Ключ")
 
     lists_table = ["leads", "managers", "clients", "transactions"]
 
